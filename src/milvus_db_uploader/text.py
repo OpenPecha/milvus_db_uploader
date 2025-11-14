@@ -1,10 +1,11 @@
 import requests
 import logging
-
+import os
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 base_url = "https://api-l25bgmwqoa-uc.a.run.app"
+from BoEmbedder.gemini import embed_texts_batch
 
 def get_metadata_from_op_api(text_id):
     logger.info(f"Fetching metadata for text_id: {text_id}")
@@ -125,10 +126,11 @@ def get_text_from_op_api(instance_id, text_id, annotation_id):
         segment_id = annotation["segment_id"]
         logger.info(f"Processing annotation {idx + 1}/{len(annotations_content)}: segment_id={segment_id}")
         data.append({
-            "segment_id": segment_id,
+            "id": segment_id,
             "content": content,
             "title": metadata["title"],
             "language": metadata["language"],
+            "dense_vector": embed_texts_batch([content], api_key=os.getenv("GOOGLE_GEMINI_KEY"))[0],
         })
     
     logger.info(f"Completed processing. Returning {len(data)} segments")
