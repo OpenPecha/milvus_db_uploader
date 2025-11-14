@@ -17,6 +17,11 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+dependencies = [
+    "pymilvus>=2.4.0",
+    "BoEmbedder @ git+https://github.com/OpenPecha/BoEmbedder.git",
+]
+
 [project.optional-dependencies]
 dev = [
     "pytest",
